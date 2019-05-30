@@ -1,0 +1,83 @@
+#map{
+    width: 1002px;
+    height: 668px;
+    background-image: url("./maps/Alterac.png");
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+#mapSelect{
+    position: fixed;
+    left: 0;
+    top: 670px;
+}
+
+#coordinates{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    font-size: 50px;
+}
+
+#y{
+    padding-left: 5px;
+}
+
+#waypointList{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 900px;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.waypoint{
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    margin-top: -6px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#JSONButton{
+    width: 200px;
+    height: 100px;
+    position: fixed;
+    left: 100px;
+    bottom: 150px;
+
+}
+
+#JSONBox{
+    position: fixed;
+    width: 910px;
+    height: 910px;
+    border: 1px solid black;
+    background-color: grey;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    z-index: 1;
+}
+
+#JSONText{
+    position: absolute;
+    height: 90%;
+    width: 90%;
+    left: 5%;
+    top: 5%;
+    resize: none;
+}
+
+#close{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+}

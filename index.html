@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Map Creator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body onload="load()">
+    <div id="map" onmousemove="showCoords(event)" ondblclick="createWaypoint(event)">
+        <svg height="100%" width="100%" id="lineCanvas">
+        </svg> 
+    </div>
+    <div id="mapSelect">Select a map: <select id="mapChoice" name="maps" onchange=changeMap(this)></select>
+        Experience: <input type="text" id="experience">
+    </div>
+    <div id="coordinates">Coordinates: (<span id="x">50</span>,<span id="y">30</span>)</div>
+    <button id="JSONButton" onclick="getJSON()">Generate JSON</button>
+    <div id="JSONBox">
+        <button id="close" onclick="closeJSON()">X</button>
+        <textarea id="JSONText"></textarea>
+    </div>
+
+    <div id="waypointList"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
