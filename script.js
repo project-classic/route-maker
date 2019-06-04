@@ -1,5 +1,6 @@
 const waypointList = document.getElementById('waypointList');
 var WAYPOINTS = [];
+let quests = [];
 
 function load(){
     var sel = document.getElementById('mapChoice');
@@ -9,6 +10,7 @@ function load(){
         opt.value = key;
         sel.appendChild(opt);
     }
+    quests = getQuests();
 };
 
 function changeMap(select){
@@ -78,21 +80,61 @@ function removeWaypoint(index){
 function addObjective(index){
     var objective = {};
     objective.type = "accept";
-    if(document.getElementById("radioComplete" + index).checked){
-      objective.type = "complete";
+    if(document.getElementById("radioNote" + index).checked){ //is a note
+        objective.type = "note";
+        objective.description = document.getElementById("textDescription" + index).value;
+        WAYPOINTS[index].objectives.push(objective);
+        updateList();
     }
-    else if(document.getElementById("radioQuest" + index).checked){
-      objective.type = "quest";
+    else{ //is a quest
+        if(document.getElementById("radioComplete" + index).checked){
+            objective.type = "complete";
+        }
+        else if(document.getElementById("radioQuest" + index).checked){
+            objective.type = "quest";
+        }
+        if(document.getElementById("textQuestID" + index).value != ""){//ID exists
+            objective.quest = quests[document.getElementById("textQuestID" + index).value].name;
+            objective.description = document.getElementById("textDescription" + index).value;
+            WAYPOINTS[index].objectives.push(objective);
+            updateList();
+        }
+        else{
+            var check = checkDuplicate(document.getElementById("textQuest" + index).value);
+            if(!check.exists){ //Quest name does not exist
+                document.getElementById("error" + index).innerHTML = "Quest name doesn't exist"
+            }
+            else if(check.exists && check.duplicate){
+                document.getElementById("error" + index).innerHTML = "Duplicates: {" + check.ids + "}";
+            }
+            else{
+                objective.quest = document.getElementById("textQuest" + index).value;
+                objective.description = document.getElementById("textDescription" + index).value;
+                WAYPOINTS[index].objectives.push(objective);
+                updateList();
+            }
+        }
     }
-    else if(document.getElementById("radioNote" + index).checked){
-      objective.type = "note";
+}
+
+function checkDuplicate(questName){
+    var questIds = [];
+    var count = 0;
+    for(var i in quests){
+        if(questName.toLowerCase() == quests[i].name.toLowerCase()){
+            count++;
+            questIds.push(i);
+        }
     }
-    if(objective.type != "note"){
-      objective.quest = document.getElementById("textQuest" + index).value;
+    if(count > 1){
+        return {duplicate: true, ids: questIds, exists: true};
     }
-    objective.description = document.getElementById("textDescription" + index).value;
-    WAYPOINTS[index].objectives.push(objective);
-    updateList();
+    else if(count == 1){
+        return {duplicate: false, exists: true};
+    }
+    else{
+        return {duplicate: false, exists: false};
+    }
 }
   
 function removeObjective(wpIndex, objIndex){
@@ -105,7 +147,7 @@ function updateList(){
     for(var i = 0; i < WAYPOINTS.length; i++){
       appendString += '</br><div class="waypointContainer" id="waypoint' + i + '">' + Number(i+1) + 
       '. Waypoint added at: (' + Math.round((WAYPOINTS[i].coords.x / 1008) * 100) + ',' + Math.round((WAYPOINTS[i].coords.y / 668) * 100) 
-      + ')<button onclick="removeWaypoint(' + i + ')">Remove</buttton></button>';
+      + ')<button onclick="removeWaypoint(' + i + ')">Remove</buttton></button>Quest ID:<input type="text" id="textQuestID' + i + '"><span class="error" id="error' + i + '"></span>';
       appendString += '<div><form id="form' + i + '">Type: <input type="radio" name="type" value="accept" id="radioAccept' + i + '" checked/> accept';
       appendString += '<input type="radio" name="type" value="complete" id="radioComplete' + i + '"> complete';
       appendString += '<input type="radio" name="type" value="quest" id="radioQuest' + i + '"> quest';
@@ -129,7 +171,12 @@ function updateList(){
 function getJSON(){
     var jsonObject = {};
     jsonObject.zone = document.getElementById("mapChoice").value;
-    jsonObject.experience = document.getElementById("experience").value;
+    if(document.getElementById("experience").value == ""){
+        jsonObject.experience = 0;
+    }
+    else{
+        jsonObject.experience = parseFloat(document.getElementById("experience").value);
+    }
     jsonObject.waypoints = JSON.parse(JSON.stringify(WAYPOINTS));
     for(var i = 0; i < WAYPOINTS.length; i++){ //Convert coordinates to percentages
         jsonObject.waypoints[i].coords.x = Math.round((jsonObject.waypoints[i].coords.x / 1008) * 100);
@@ -192,4 +239,4 @@ const MAPS = {
     westfall: ["Westfall", "./maps/Westfall.png"],
     wetlands: ["Wetlands", "./maps/Wetlands.png"],
     winterspring: ["Winterspring", "./maps/Winterspring.png"]
-  };
+};
