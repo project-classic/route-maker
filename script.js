@@ -94,6 +94,7 @@ function addObjective(index){
             objective.type = "quest";
         }
         if(document.getElementById("textQuestID" + index).value != ""){//ID exists
+            objective.id = document.getElementById("textQuestID" + index).value;
             objective.quest = quests[document.getElementById("textQuestID" + index).value].name;
             objective.description = document.getElementById("textDescription" + index).value;
             WAYPOINTS[index].objectives.push(objective);
