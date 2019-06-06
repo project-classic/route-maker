@@ -100,15 +100,16 @@ function addObjective(index){
             WAYPOINTS[index].objectives.push(objective);
             updateList();
         }
-        else{
+        else{ //No idea entered
             var check = checkDuplicate(document.getElementById("textQuest" + index).value);
             if(!check.exists){ //Quest name does not exist
                 document.getElementById("error" + index).innerHTML = "Quest name doesn't exist"
             }
-            else if(check.exists && check.duplicate){
+            else if(check.exists && check.duplicate){ //Duplicates exists
                 document.getElementById("error" + index).innerHTML = "Duplicates: {" + check.ids + "}";
             }
-            else{
+            else{//Quest name exists, no duplicates
+                objective.id = check.ids[0];
                 objective.quest = document.getElementById("textQuest" + index).value;
                 objective.description = document.getElementById("textDescription" + index).value;
                 WAYPOINTS[index].objectives.push(objective);
@@ -128,10 +129,10 @@ function checkDuplicate(questName){
         }
     }
     if(count > 1){
-        return {duplicate: true, ids: questIds, exists: true};
+        return {duplicate: true, exists: true, ids: questIds};
     }
     else if(count == 1){
-        return {duplicate: false, exists: true};
+        return {duplicate: false, exists: true, ids: questIds};
     }
     else{
         return {duplicate: false, exists: false};
