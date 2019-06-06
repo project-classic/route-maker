@@ -1,7 +1,8 @@
 #map{
     width: 1002px;
     height: 668px;
-    background-image: url("./maps/Alterac.png");
+    background-image: url("./maps/alterac.jpg");
+    background-size: cover;
     position: fixed;
     left: 0;
     top: 0;
