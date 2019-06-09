@@ -4,17 +4,21 @@ let quests = [];
 
 function load(){
     var sel = document.getElementById('mapChoice');
-    for(var key in MAPS){
-        var opt = document.createElement('option');
-        opt.appendChild(document.createTextNode(MAPS[key][0]));
-        opt.value = key;
-        sel.appendChild(opt);
-    }
+    getZones().then(zones => {
+        for (var x in zones) {
+            var opt = document.createElement('option');
+            opt.appendChild(document.createTextNode(zones[x]));
+            opt.value = x;
+            opt.label = zones[x];
+            sel.appendChild(opt);
+        }
+    });
     quests = getQuests();
 };
 
 function changeMap(select){
-    document.getElementById("map").style.backgroundImage = "url('" + MAPS[select.options[select.selectedIndex].getAttribute("value")][1] + "')"; 
+    // document.getElementById("map").style.backgroundImage = "url('" + MAPS[select.options[select.selectedIndex].getAttribute("value")][1] + "')";
+    document.getElementById("map").style.backgroundImage = 'url(./maps/' + select.options[select.selectedIndex].getAttribute("label") + '.jpg)';
 }
 
 function showCoords(event) {
@@ -188,57 +192,9 @@ function getJSON(){
 
     console.log(JSON.stringify(jsonObject));
     document.getElementById("JSONBox").style.visibility = "visible";
-    document.getElementById("JSONText").value = JSON.stringify(jsonObject);
+    document.getElementById("JSONText").value = JSON.stringify(jsonObject, null, 4);
 }
 
 function closeJSON(){
     document.getElementById("JSONBox").style.visibility = "hidden";
 }
-
-const MAPS = {
-    alterac: ["Alterac Mountains", "./maps/alterac.jpg"],
-    arathi: ["Arathi Highlands", "./maps/arathi.jpg"],
-    ashenvale: ["Ashenvale", "./maps/ashenvale.jpg"],
-    azshara: ["Azshara", "./maps/azshara.jpg"],
-    badlands: ["Badlands", "./maps/badlands.jpg"],
-    barrens: ["Barrens", "./maps/barrens.jpg"],
-    blasted: ["Blasted Lands", "./maps/blasted.jpg"],
-    steppes: ["Burning Steppes", "./maps/steppes.jpg"],
-    darkshore: ["Darkshore", "./maps/darkshore.jpg"],
-    darnassus: ["Darnassus", "./maps/darnassus.jpg"],
-    deadwind: ["Deadwind Pass", "./maps/deadwind.jpg"],
-    desolace: ["Desolace", "./maps/desolace.jpg"],
-    morogh: ["Dun Morogh", "./maps/morogh.jpg"],
-    durotar: ["Durotar", "./maps/durotar.jpg"],
-    duskwood: ["Duskwood", "./maps/duskwood.jpg"],
-    dustwallow: ["Dustwallow Marsh", "./maps/dustwallow.jpg"],
-    epl: ["Eastern Plaguelands", "./maps/epl.jpg"],
-    elwynn: ["Elwynn Forest", "./maps/elwynn.jpg"],
-    felwood: ["Felwood", "./maps/felwood.jpg"],
-    feralas: ["Feralas", "./maps/feralas.jpg"],
-    hillsbrad: ["Hillsbrad Foothills", "./maps/hillsbrad.jpg"],
-    hinterlands: ["Hinterlands", "./maps/hinterlands.jpg"],
-    ironforge: ["Ironforge", "./maps/ironforge.jpg"],
-    loch: ["Loch Modan", "./maps/loch.jpg"],
-    mulgore: ["Mulgore", "./maps/mulgore.jpg"],
-    orgrimmar: ["Orgrimmar", "./maps/orgrimmar.jpg"],
-    redridge: ["Redridge Mountains", "./maps/redridge.jpg"],
-    searing: ["Searing Gorge", "./maps/searing.jpg"],
-    silithus: ["Silithus", "./maps/silithus.jpg"],
-    silverpine: ["Silverpine Forest", "./maps/silverpine.jpg"],
-    stonetalon: ["Stonetalon Mountains", "./maps/stonetalon.jpg"],
-    stormwind: ["Stormwind", "./maps/stormwind.jpg"],
-    stv: ["Stranglethorn Vale", "./maps/stv.jpg"],
-    swamp: ["Swamp of Sorrow", "./maps/swamp.jpg"],
-    tanaris: ["Tanaris", "./maps/tanaris.jpg"],
-    teldrassil: ["Teldrassil", "./maps/teldrassil.jpg"],
-    needles: ["Thousand Needles", "./maps/needles.jpg"],
-    thunderbluff: ["Thunder Bluff", "./maps/thunderbluff.jpg"],
-    tirisfal: ["Tirisfal Glades", "./maps/tirisfal.jpg"],
-    undercity: ["Undercity", "./maps/undercity.jpg"],
-    ungoro: ["Ungoro Crater", "./maps/ungoro.jpg"],
-    wpl: ["Western Plaguelands", "./maps/wpl.jpg"],
-    westfall: ["Westfall", "./maps/westfall.jpg"],
-    wetlands: ["Wetlands", "./maps/wetlands.jpg"],
-    winterspring: ["Winterspring", "./maps/winterspring.jpg"]
-};
