@@ -192,7 +192,7 @@ function getJSON(){
 
     console.log(JSON.stringify(jsonObject));
     document.getElementById("JSONBox").style.visibility = "visible";
-    document.getElementById("JSONText").value = JSON.stringify(jsonObject, null, 4);
+    document.getElementById("JSONText").value = JSON.stringify(jsonObject, null, 2);
 }
 
 function closeJSON(){
