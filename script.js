@@ -1,5 +1,6 @@
 const waypointList = document.getElementById('waypointList');
 var WAYPOINTS = [];
+var WAYPOINT_INDEX = 0
 let quests = [];
 
 function load(){
@@ -14,6 +15,14 @@ function load(){
         }
     });
     quests = getQuests();
+
+    window.addEventListener('keypress', function (e) {
+        console.log(e.key)
+        var key = e.key.toLowerCase()
+        if (key === 'enter') {
+            document.getElementById('shitButton' + WAYPOINT_INDEX).click()
+        }
+    })
 };
 
 function changeMap(select){
@@ -153,14 +162,14 @@ function updateList(){
     for(var i = 0; i < WAYPOINTS.length; i++){
       appendString += '</br><div class="waypointContainer" id="waypoint' + i + '">' + Number(i+1) + 
       '. Waypoint added at: (' + Math.round((WAYPOINTS[i].coords.x / 1008) * 100) + ',' + Math.round((WAYPOINTS[i].coords.y / 668) * 100) 
-      + ')<button onclick="removeWaypoint(' + i + ')">Remove</buttton></button>Quest ID:<input type="text" id="textQuestID' + i + '"><span class="error" id="error' + i + '"></span>';
+      + ')<button onclick="removeWaypoint(' + i + ')">Remove</buttton></button>Quest ID:<input type="text" id="textQuestID' + i + '" onkeypress="WAYPOINT_INDEX = this.id.substr(-1)"><span class="error" id="error' + i + '"></span>';
       appendString += '<div><form id="form' + i + '">Type: <input type="radio" name="type" value="accept" id="radioAccept' + i + '" checked/> accept';
       appendString += '<input type="radio" name="type" value="complete" id="radioComplete' + i + '"> complete';
       appendString += '<input type="radio" name="type" value="quest" id="radioQuest' + i + '"> quest';
       appendString += '<input type="radio" name="type" value="note" id="radioNote' + i + '"> note';
-      appendString += '<span> Quest:</span><input type="text" id="textQuest' + i + '">';
-      appendString += '<span> Description:</span><input type="text" class="txtBox" id="textDescription' + i + '">';
-      appendString += '<button type="button" onclick="addObjective(' + i + ')">Add Objective</button></form></div>';
+      appendString += '<span> Quest:</span><input type="text" id="textQuest' + i + '" onkeypress="WAYPOINT_INDEX = this.id.substr(-1)">';
+      appendString += '<span> Description:</span><input type="text" class="txtBox" id="textDescription' + i + '" onkeypress="WAYPOINT_INDEX = this.id.substr(-1)">';
+      appendString += '<button id="shitButton' + i + '" type="button" onclick="addObjective(' + i + ')">Add Objective</button></form></div>';
       appendString += '<div id="objListWP' + i + '">'
       for(var j = 0; j < WAYPOINTS[i].objectives.length; j++){
         appendString += '<div><button onclick="removeObjective(' + i + ', ' + j + ')">x</buttton></button>' + WAYPOINTS[i].objectives[j].type;
@@ -172,6 +181,7 @@ function updateList(){
       appendString += '</div></div></br>';
     }
     waypointList.innerHTML = appendString;
+
 }
   
 function getJSON(){
